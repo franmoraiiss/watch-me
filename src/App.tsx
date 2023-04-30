@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { SideBar } from './components/SideBar';
 import { Content } from './components/Content';
 
 import { api } from './services/api';
+
+import { MovieProps } from './interfaces/movie';
 
 import './styles/global.scss';
 
@@ -14,17 +16,6 @@ interface GenreResponseProps {
   id: number;
   name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
   title: string;
-}
-
-interface MovieProps {
-  imdbID: string;
-  Title: string;
-  Poster: string;
-  Ratings: Array<{
-    Source: string;
-    Value: string;
-  }>;
-  Runtime: string;
 }
 
 export function App() {
@@ -51,9 +42,9 @@ export function App() {
     })
   }, [selectedGenreId]);
 
-  function handleClickButton(id: number) {
+  const handleClickButton = useCallback((id: number) => {
     setSelectedGenreId(id);
-  }
+  }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -64,7 +55,7 @@ export function App() {
       />
 
       <Content
-        selectedGenre={selectedGenre}
+        title={selectedGenre.title}
         movies={movies}
       />
     </div>
